@@ -34,7 +34,14 @@ export async function redirectToSpotifyAuth() {
 
 const Login = () => {
   return (
-    <Box>
+    <Box sx={{
+          backgroundColor: 'background.paper',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column'
+        }} >
       <img
         src="/Spotify_Logo.png"
         alt="Spotify logo"
