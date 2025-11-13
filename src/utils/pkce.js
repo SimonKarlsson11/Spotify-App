@@ -1,5 +1,5 @@
 // src/utils/pkce.js
-
+/*
 const clientId = import.meta.env.VITE_CLIENT_ID;
 const redirectUri = import.meta.env.VITE_LIVE_URL;
 
@@ -53,3 +53,4 @@ export const getToken = async (code) => {
 
   return response.access_token;
 };
+*/
