@@ -1,8 +1,8 @@
 export const authEndpoint = "https://accounts.spotify.com/authorize";
-export const clientId = process.env.REACT_APP_CLIENT_ID;
-export const liveURL = process.env.REACT_APP_LIVE_URL;
+export const clientId = import.meta.env.VITE_CLIENT_ID;
+export const liveURL = import.meta.env.VITE_LIVE_URL;
 export const devURL = "http://127.0.0.1:5173/";
-export const redirectURL = process.env.NODE_ENV === "production" ? liveURL : devURL;
+export const redirectURL = import.meta.env.prod === "production" ? liveURL : devURL;
 export const scopes = [
 'playlist-read-collaborative',
 'playlist-modify-public',
