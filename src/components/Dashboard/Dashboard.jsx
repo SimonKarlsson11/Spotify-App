@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { getAccessTokenFromStorage } from '../../utils/getAccessTokenFromStorage';
+import SideNav from '../SideNav/SideNav';
 
 const Dashboard = ({ spotifyApi }) => {
   const [token, setToken] = useState(getAccessTokenFromStorage());
@@ -49,8 +50,7 @@ const Dashboard = ({ spotifyApi }) => {
       }}
     >
       <Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
-        {/* Här kan SideNav komma in senare */}
-        {/* <SideNav spotifyApi={spotifyApi} token={token} /> */}
+        {<SideNav spotifyApi={spotifyApi} token={token} />}
 
         {/* Nested routes från App.jsx renderas här */}
         <Outlet />

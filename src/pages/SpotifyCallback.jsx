@@ -1,33 +1,32 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/pages/SpotifyCallback.jsx
+import React, { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getToken } from '../utils/pkce';
 
 const SpotifyCallback = () => {
+  const { search } = useLocation();
   const navigate = useNavigate();
+  const handledRef = useRef(false); // 👈 för att undvika dubbelkörning i StrictMode
 
   useEffect(() => {
-    const runCallback = async (code) => {
-      try {
-        await getToken(code);
-        // Redirect user after login
-        navigate('/');
-      } catch (error) {
-        console.error('Error handling Spotify callback:', error);
-      }
-    };
+    if (handledRef.current) return; // redan kört en gång
+    handledRef.current = true;
 
-    const code = new URLSearchParams(window.location.search).get('code');
-    const codeVerifier = localStorage.getItem('code_verifier');
+    const params = new URLSearchParams(search);
+    const code = params.get('code');
 
-    if (!code || !codeVerifier) {
-      console.warn('Missing code or code_verifier');
+    if (!code) {
+      navigate('/login');
       return;
     }
 
-    runCallback(code);
-  }, []);
+    (async () => {
+      await getToken(code); // den sparar spotifyToken i sessionStorage
+      navigate('/dashboard');
+    })();
+  }, [search, navigate]);
 
-  return <p>Logging you in...</p>;
+  return <div style={{ padding: 40 }}>Logging in with Spotify...</div>;
 };
 
 export default SpotifyCallback;
