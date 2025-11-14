@@ -1,42 +1,63 @@
-// src/pages/Dashboard.jsx
-import React, { useEffect, useState } from 'react';
+// src/components/Dashboard/Dashboard.jsx
+import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+import { getAccessTokenFromStorage } from '../../utils/getAccessTokenFromStorage';
 
 const Dashboard = ({ spotifyApi }) => {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(getAccessTokenFromStorage());
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const accessToken = sessionStorage.getItem('spotifyToken');
+    // ingen token = inget att göra
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
 
-    if (!accessToken) return;
+    const onMount = async () => {
+      spotifyApi.setAccessToken(token);
+      setIsLoading(false);
+    };
 
-    spotifyApi.setAccessToken(accessToken);
-    setToken(accessToken);
-  }, [spotifyApi]);
+    onMount();
+  }, [spotifyApi, token]);
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography>Laddar dashboard…</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
       sx={{
         width: '100%',
-        minHeight: '100vh',
-        bgcolor: 'background.default',
-        color: 'text.primary',
+        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 2,
       }}
     >
-      <Typography variant="h4">
-        Techover Self Made – Spotify
-      </Typography>
+      <Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
+        {/* Här kan SideNav komma in senare */}
+        {/* <SideNav spotifyApi={spotifyApi} token={token} /> */}
 
-      {token ? (
-        <Typography>Du är inloggad med Spotify 🎧</Typography>
-      ) : (
-        <Typography>Försöker läsa token...</Typography>
-      )}
+        {/* Nested routes från App.jsx renderas här */}
+        <Outlet />
+      </Box>
+
+      {/* Här kan Player komma in senare */}
+      {/* {token && <Player spotifyApi={spotifyApi} />} */}
     </Box>
   );
 };

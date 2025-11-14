@@ -1,36 +1,37 @@
-// src/App.jsx
-import React from 'react';
+import { Box, dividerClasses } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';
-
 import Login from './pages/Login';
-import SpotifyCallback from './pages/SpotifyCallback';
 import Dashboard from './components/Dashboard/Dashboard';
+import SpotifyCallback from './pages/SpotifyCallback';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/Home'
 
-import ProtectedRoute from './components/NavPlaylist/ProtectedRoute';
 
 function App({ spotifyApi }) {
-  return (
+	return (
+		<Box className="App">
     <Routes>
-      {/* Publik login-sida */}
-      <Route path="/login" element={<Login />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/callback" element={<SpotifyCallback />} />
+				<Route
+					path="/dashboard"
+					element={
+						<ProtectedRoute>
+							<Dashboard spotifyApi={spotifyApi} />
+						</ProtectedRoute>
+					}
+				>
+					{/* ✅ Nested under /dashboard */}
+					<Route path="" element={<Home />} />
+					<Route path="playlist/:id" element={<div>Playlist</div>} />
+					<Route path="library" element={<div>Library </div>} />
+				</Route>
 
-      {/* Spotify callback efter inloggning */}
-      <Route path="/callback" element={<SpotifyCallback />} />
-
-      {/* Dashboard är skyddad, kräver token */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard spotifyApi={spotifyApi} />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Allt annat leder till dashboard (ProtectedRoute tar dig till login om ingen token finns) */}
-      <Route path="*" element={<Navigate to="/dashboard" />} />
-    </Routes>
-  );
+				{/* ✅ Redirect unknown routes */}
+				<Route path="*" element={<Navigate to="/dashboard" />} />
+			</Routes>
+		</Box>
+	);
 }
 
 export default App;
