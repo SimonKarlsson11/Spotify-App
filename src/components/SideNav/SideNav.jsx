@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react';
 import { Box, Divider } from '@mui/material';
 
 const SideNav = ({ spotifyApi, token }) => {
+    useEffect(() => {
+        async function getPlaylists() {
+            if (!spotifyApi) return;
+
+            const data = await spotifyApi.getUserPlaylists();
+            console.log(data.body);
+        }
+        getPlaylists();
+    }, [spotifyApi, token]);
+
 	return (
 		<Box sx={{
             backgroundColor: 'background.default',
@@ -16,7 +26,7 @@ const SideNav = ({ spotifyApi, token }) => {
 			<Box px={3} py={1} >
 				<Divider sx={{ backgroundColor: '#ffffff40' }} />
 			</Box>
-			<Box sx={{ overFlowY: 'auto', flex: 1 }} >
+			<Box sx={{ overflowY: 'auto', flex: 1 }} >
                 {/* Här kommer playlists */}
             </Box>
 		</Box>
