@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import SpotifyCallback from './pages/SpotifyCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home'
-import PlayList from './components/Dashboard/NavPlaylist/NavPlaylist';
+import PlayList from './components/NavPlaylist/NavPlaylist';
 
 
 
