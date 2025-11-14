@@ -5,6 +5,8 @@ import Dashboard from './components/Dashboard/Dashboard';
 import SpotifyCallback from './pages/SpotifyCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home'
+import PlayList from './components/Dashboard/NavPlaylist/NavPlaylist';
+
 
 
 function App({ spotifyApi }) {
@@ -23,7 +25,7 @@ function App({ spotifyApi }) {
 				>
 					{/* ✅ Nested under /dashboard */}
 					<Route path="" element={<Home />} />
-					<Route path="playlist/:id" element={<div>Playlist</div>} />
+					<Route path="playlist/:id" element={<div><PlayList /></div>} />
 					<Route path="library" element={<div>Library </div>} />
 				</Route>
 

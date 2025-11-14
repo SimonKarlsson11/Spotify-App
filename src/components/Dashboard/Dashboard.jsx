@@ -52,10 +52,11 @@ const Dashboard = ({ spotifyApi }) => {
       <Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
         {<SideNav spotifyApi={spotifyApi} token={token} />}
 
+		
         {/* Nested routes från App.jsx renderas här */}
-        <Outlet />
+        <Outlet /> 
       </Box>
-
+	  		
       {/* Här kan Player komma in senare */}
       {/* {token && <Player spotifyApi={spotifyApi} />} */}
     </Box>
