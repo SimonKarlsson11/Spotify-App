@@ -56,7 +56,6 @@ const Dashboard = ({ spotifyApi }) => {
         {/* Nested routes från App.jsx renderas här */}
         <Outlet /> 
       </Box>
-	  		
       {/* Här kan Player komma in senare */}
       {/* {token && <Player spotifyApi={spotifyApi} />} */}
     </Box>
