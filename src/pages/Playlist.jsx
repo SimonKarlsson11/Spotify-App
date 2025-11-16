@@ -1,8 +1,32 @@
 import { Box, Typography, Avatar } from '@mui/material';
-
-
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const Playlist = ({ spotifyApi, token }) => {
+	const [playlistInfo, setPlaylistInfo] = useState();
+	const {songs, setSongs } = useState([]);
+	const { id } = useParams();
+
+	useEffect(() => {
+		const getData = async () => {
+			try {
+				const playlistDetails = await spotifyApi.getPlaylist(id);
+				setPlaylistInfo({
+					name: playlistDetails.body.name,
+					image: playlistDetails.body.images[0].url,
+				});
+				const { items } = playlistDetails.body.tracks;
+				// Format songs
+				setSongs(items);
+				console.log(items);
+			} catch (e) {
+				console.error(e);
+			}
+		};
+
+		getData();
+	}, [id]);
+
 	return (
 		<Box id="Playlist__page" sx={{ background: 'background.paper', flex: 1, overflowY: 'auto' }}>
 			<Box
@@ -13,13 +37,13 @@ const Playlist = ({ spotifyApi, token }) => {
 					display: 'flex',
 					justifyContent: 'flex-start',
 					alignItems: { xs: 'flex-start', md: 'flex-end', xl: 'center' },
-                    gap: 3,
-                    boxSizing: 'border-box',
-                    flexDirection: { xs: 'column', md: 'row' },
+					gap: 3,
+					boxSizing: 'border-box',
+					flexDirection: { xs: 'column', md: 'row' }
 				}}
 			>
 				<Avatar
-					src={null}
+					src={playlistInfo?.image}
 					variant="square"
 					alt={null}
 					sx={{ boxShadow: 15, width: { xs: '100%', md: 235 }, height: { xs: '100%', md: 235 } }}
@@ -27,7 +51,7 @@ const Playlist = ({ spotifyApi, token }) => {
 				<Box>
 					<Typography sx={{ fontSize: 12, fontWeight: 'bold', color: 'text.primary' }}>Playlist</Typography>
 					<Typography sx={{ fontSize: { xs: 42, md: 72 }, fontWeight: 'bold', color: 'text.primary' }}>
-						Fake name Playlist
+						{playlistInfo?.name}
 					</Typography>
 				</Box>
 			</Box>
