@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { getAccessTokenFromStorage } from '../../utils/getAccessTokenFromStorage';
 import SideNav from '../SideNav/SideNav';
+import Player from '../Player/Player';
 
 const Dashboard = ({ spotifyApi }) => {
   const [token, setToken] = useState(getAccessTokenFromStorage());
@@ -56,8 +57,7 @@ const Dashboard = ({ spotifyApi }) => {
         {/* Nested routes från App.jsx renderas här */}
         <Outlet /> 
       </Box>
-      {/* Här kan Player komma in senare */}
-      {/* {token && <Player spotifyApi={spotifyApi} />} */}
+        {token && <Player spotifyApi={spotifyApi} token={token} />}
     </Box>
   );
 };
