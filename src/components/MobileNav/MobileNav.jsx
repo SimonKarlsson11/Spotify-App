@@ -1,25 +1,30 @@
+import { useState } from 'react';
 import { Box, BottomNavigation, BottomNavigationAction } from '@mui/material';
 import { Home, List } from '@mui/icons-material';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 const MobileNav = () => {
-    const nav = useNavigate();
-    const [value, setValue] = useState(0);
-
+	const [value, setValue] = useState(0);
+	const navigate = useNavigate();
+	const styledNav = { color: 'text.secondary' };
 	return (
 		<Box sx={{ display: { xs: 'block', md: 'none' } }}>
 			<BottomNavigation
-				sx={{ backgroundColor: 'background.paper', color: 'text.secondary' }}
+				sx={{ bgcolor: 'background.paper' }}
 				showLabels
-				value={null}
-				onChange={(e, value) => setValue(value)}
+				value={value}
+				onChange={(_, newValue) => {
+					setValue(newValue);
+				}}
 			>
-                <BottomNavigationAction label="Home" icon={<Home />} onClick={() => nav('/')} />
-                <BottomNavigationAction label="Ditt bilbotek" icon={<List />} onClick={() => nav('/library')} /> 
-            </BottomNavigation>
+				<BottomNavigationAction sx={styledNav} label="Home" icon={<Home />} onClick={() => navigate('/')} />
+				<BottomNavigationAction
+					sx={styledNav}
+					label="Ditt bibliotek"
+					icon={<List />}
+                    onClick={() => navigate('/dashboard/library')}
+				/>
+			</BottomNavigation>
 		</Box>
 	);
 };
-
 export default MobileNav;

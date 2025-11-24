@@ -44,7 +44,7 @@ const SongRow = ({ images, title, artist, album, duration, i, loading, position,
 				{loading ? <Skeleton variant="text" width={50} height={24} /> : album}
 			</Grid>
 			<Grid xs={3} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-				{loading ? <Skeleton variant="text" width={50} height={24} /> : formatTime({duration})}
+				{loading ? <Skeleton variant="text" width={50} height={24} /> : formatTime(duration)}
 			</Grid>
 		</Grid>
 	);
