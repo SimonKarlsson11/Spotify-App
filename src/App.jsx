@@ -6,6 +6,7 @@ import SpotifyCallback from './pages/SpotifyCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Playlist from './pages/Playlist';
+import Library from './pages/Library';
 
 function App({ spotifyApi }) {
 	return (
@@ -24,7 +25,7 @@ function App({ spotifyApi }) {
 					{/* ✅ Nested under /dashboard */}
 					<Route path="" element={<Home />} />
 					<Route path="playlist/:id" element={<Playlist spotifyApi={spotifyApi}/>} />
-					<Route path="library" element={<div>Library </div>} />
+					<Route path="library" element={<Library spotifyApi={spotifyApi}/>} />
 				</Route>
 
 				{/* ✅ Redirect unknown routes */}

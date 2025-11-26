@@ -2,7 +2,7 @@ import { Box, IconButton, Container, Grid, Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PlayerControls from '../PlayerControls/PlayerControls';
 
-const PlayerOverlay = ({ playerOverlayIsOpen, closeOverlay }) => {
+const PlayerOverlay = ({ playerOverlayIsOpen, closeOverlay, progress, is_paused, duration, player, current_track, active }) => {
 	return (
 		<Box
 			id="PlayerOverlay"
@@ -28,18 +28,28 @@ const PlayerOverlay = ({ playerOverlayIsOpen, closeOverlay }) => {
 					<Grid
 						item
 						xs={5}
-						sx={{ backgroundImage: null, backgroundPosition: 'center', backgroudSize: 'cover' }}
+						sx={{ backgroundImage: `url("${current_track?.album.images[0].url}")`, backgroundPosition: 'center', backgroudSize: 'cover' }}
 					></Grid>
 					<Grid item xs={1}>
 						<Typography sx={{ color: 'text.primary', fontSize: '28px' }} >
-							Rick flex
+							{current_track?.name}
 						</Typography>
 						<Typography sx={{ color: 'text.secondary', fontSize: '18px' }} >
-							Drake
+							{current_track?.artists[0].name}
 						</Typography>
 					</Grid>
 					<Grid item xs={2}>
-						{/* <  PlayerControls is_paused, progress, duration, player  /> */}
+
+						{active ? (
+						<PlayerControls
+							progress={progress}
+							is_paused={is_paused}
+							duration={duration}
+							player={player}
+						/>
+					) : (
+						<Box>Please transfer Playback</Box>
+					)}
 					</Grid>
 				</Grid>
 			</Container>

@@ -42,21 +42,29 @@ const Player = ({ spotifyApi, token }) => {
 			});
 
 			player.addListener('player_state_changed', (state) => {
-				if (!state || !state.track_window?.current_track) {
-					return;
-				}
-				const duration = state.track_window.current_track.duration_ms / 1000;
-				const progress = state.position / 1000;
-				setDuration(duration);
-				setProgress(progress);
-				setIsPaused(state.paused);
-				setCurrentTrack(state.track_window.current_track);
+  if (!state) {
+    setActive(false);
+    return;
+  }
+
+  const track = state.track_window?.current_track;
+  if (!track) {
+    setActive(true); // enheten lever men ingen låt än
+    return;
+  }
+
+  const durationSec = track.duration_ms / 1000;
+  const progressSec = state.position / 1000;
+
+  setDuration(durationSec);
+  setProgress(progressSec);
+  setIsPaused(state.paused);
+  setCurrentTrack(track);
 
 				player.getCurrentState().then((state) => {
 					!state ? setActive(false) : setActive(true);
 				});
 			});
-
 			player.connect();
 		};
 	}, []);
@@ -73,21 +81,30 @@ const Player = ({ spotifyApi, token }) => {
 	}, [localPlayer]);
 
 	useEffect(() => {
-		const transferPlayback = async () => {
-			if(device) {
-				const res = await spotifyApi.getMyDevices();
-				console.log(res);
-				await spotifyApi.transferMyPlayback([device], false);
-			}
-		}
+  if (!device) return;
 
-		transferPlayback(device);
-	}, [device, spotifyApi]);
+  const transferPlayback = async () => {
+    try {
+      const res = await spotifyApi.getMyDevices();
+      console.log('Devices:', res.body.devices);
+
+      await spotifyApi.transferMyPlayback([device], { play: false });
+
+      setActive(true); // markera att vår Web Player är aktiv
+    } catch (e) {
+      console.error('transferMyPlayback error', e);
+    }
+  };
+
+  transferPlayback();
+}, [device, spotifyApi]);
+
+
 
 	return (
 		<Box>
 			<Grid
-			onClick={() => setPlayerOverlayIsOpen((prevState) => !prevState)}
+				onClick={() => setPlayerOverlayIsOpen((open) => !open)}
 				container
 				px={3}
 				sx={{
@@ -117,19 +134,31 @@ const Player = ({ spotifyApi, token }) => {
 					md={4}
 					item
 				>
-					{active ? <PlayerControls
-						progress={progress}
-						is_paused={is_paused}
-						duration={duration}
-						player={localPlayer}
-					/> : <Box>Please transfer Playback</Box>}
-					
+					{active ? (
+						<PlayerControls
+							progress={progress}
+							is_paused={is_paused}
+							duration={duration}
+							player={localPlayer}
+						/>
+					) : (
+						<Box>Please transfer Playback</Box>
+					)}
 				</Grid>
-				<Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }} xs={12} md={4} item>
+				<Grid sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'flex-end' }} xs={12} md={4} item>
 					<PlayerVolume player={localPlayer} />
 				</Grid>
 			</Grid>
-			<PlayerOverlay playerOverlayIsOpen={playerOverlayIsOpen} closeoverlay={() => setPlayerOverlayIsOpen(false) } />
+			<PlayerOverlay
+				playerOverlayIsOpen={playerOverlayIsOpen}
+				closeOverlay={() => setPlayerOverlayIsOpen(false)}
+				progress={progress}
+				is_paused={is_paused}
+				duration={duration}
+				player={localPlayer}
+				current_track={current_track}
+				active={active}
+			/>
 		</Box>
 	);
 };

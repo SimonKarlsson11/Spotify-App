@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, BottomNavigation, BottomNavigationAction } from '@mui/material';
 import { Home, List } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+
 const MobileNav = () => {
 	const [value, setValue] = useState(0);
 	const navigate = useNavigate();
